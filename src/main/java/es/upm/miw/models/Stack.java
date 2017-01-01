@@ -20,6 +20,13 @@ public abstract class Stack {
 	}
 
 	/**
+	 * @return the cards
+	 */
+	protected ArrayList<Card> getCards() {
+		return cards;
+	}
+
+	/**
 	 * @return
 	 */
 	protected int numberOfCards() {

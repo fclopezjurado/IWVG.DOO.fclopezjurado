@@ -76,5 +76,4 @@ public class Card {
 	protected void turn() {
 		this.upturned = this.isUpturned() ? false : true;
 	}
-
 }
