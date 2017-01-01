@@ -8,19 +8,22 @@ package es.upm.miw.models;
  *
  */
 public enum Suit {
-	GOLDS("O"),
-	CUPS("C"),
-	SWORDS("E"),
-	CLUBS("B");
-	
+	GOLDS("O"), CUPS("C"), SWORDS("E"), CLUBS("B");
+
 	private String suit;
-	
-	private Suit(String suit){
+
+	/**
+	 * @param suit
+	 */
+	private Suit(String suit) {
 		this.suit = suit;
 	}
-	
+
+	/*
+	 * @see java.lang.Enum#toString()
+	 */
 	@Override
-	public String toString(){
+	public String toString() {
 		return this.suit;
 	}
 }
