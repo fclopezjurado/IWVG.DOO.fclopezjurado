@@ -16,8 +16,7 @@ public class Card {
 	 * @param number
 	 * @param pip
 	 */
-	public Card(CardNumber number, Suit pip) {
-		super();
+	protected Card(CardNumber number, Suit pip) {
 		this.number = number;
 		this.pip = pip;
 		this.upturned = false;
@@ -28,8 +27,7 @@ public class Card {
 	 * @param pip
 	 * @param upturned
 	 */
-	public Card(CardNumber number, Suit pip, boolean upturned) {
-		super();
+	protected Card(CardNumber number, Suit pip, boolean upturned) {
 		this.number = number;
 		this.pip = pip;
 		this.upturned = upturned;
@@ -38,7 +36,7 @@ public class Card {
 	/**
 	 * @return the number
 	 */
-	public CardNumber getNumber() {
+	protected CardNumber getNumber() {
 		return number;
 	}
 
@@ -46,14 +44,14 @@ public class Card {
 	 * @param number
 	 *            the number to set
 	 */
-	public void setNumber(CardNumber number) {
+	protected void setNumber(CardNumber number) {
 		this.number = number;
 	}
 
 	/**
 	 * @return the pip
 	 */
-	public Suit getPip() {
+	protected Suit getPip() {
 		return pip;
 	}
 
@@ -61,21 +59,21 @@ public class Card {
 	 * @param pip
 	 *            the pip to set
 	 */
-	public void setPip(Suit pip) {
+	protected void setPip(Suit pip) {
 		this.pip = pip;
 	}
 
 	/**
 	 * @return the upturned
 	 */
-	public boolean isUpturned() {
+	protected boolean isUpturned() {
 		return upturned;
 	}
 
 	/**
 	 * 
 	 */
-	public void turn() {
+	protected void turn() {
 		this.upturned = this.isUpturned() ? false : true;
 	}
 
