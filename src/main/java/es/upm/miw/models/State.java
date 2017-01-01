@@ -8,5 +8,5 @@ package es.upm.miw.models;
  *
  */
 public enum State {
-
+	INITIAL, IN_GAME, FINAL
 }
