@@ -1,7 +1,7 @@
 /**
  * 
  */
-package es.upm.miw.models;
+package es.upm.miw.utils;
 
 /**
  * @author FCL
@@ -15,7 +15,8 @@ public enum Option {
 	MOVE_FROM_PILE_TO_FOUNDATION("Mover de escalera a palo"), 
 	MOVE_FROM_PILE_TO_PILE("Mover de escalera a escalera"), 
 	MOVE_FROM_FOUNDATION_TO_PILE("Mover de palo a escalera"), 
-	TURN_CARD_FROM_PILE("Voltear en escalera");
+	TURN_CARD_FROM_PILE("Voltear en escalera"),
+	EXIT_GAME("Salir");
 
 	private String option;
 
