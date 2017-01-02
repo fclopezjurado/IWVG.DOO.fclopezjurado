@@ -11,7 +11,7 @@ public class Pile extends Stack {
 	/**
 	 * 
 	 */
-	public Pile() {
+	protected Pile() {
 		super();
 	}
 
