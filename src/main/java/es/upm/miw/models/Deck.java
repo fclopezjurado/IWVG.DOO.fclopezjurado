@@ -11,7 +11,7 @@ public class Deck extends Stack {
 	/**
 	 * 
 	 */
-	public Deck() {
+	protected Deck() {
 		super();
 	}
 
