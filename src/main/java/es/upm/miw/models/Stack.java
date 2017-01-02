@@ -71,4 +71,17 @@ public abstract class Stack {
 
 		this.cards.get(this.numberOfCards() - 1).turn();
 	}
+	
+	/**
+	 * @param card
+	 * @return
+	 */
+	protected boolean isCardInStack(Card card) {
+		if (this.numberOfCards() > 0)
+			for (Card cardInDeck : this.getCards())
+				if (cardInDeck.equals(card))
+					return true;
+		
+		return false;
+	}
 }
