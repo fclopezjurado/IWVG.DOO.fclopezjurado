@@ -60,11 +60,11 @@ public class IO {
 	 * @param inputMessage
 	 * @return
 	 */
-	public int readMenuOption(String inputMessage) {
+	public int readMenuOption() {
 		int option = 0;
 
 		while (option == 0) {
-			option = this.readInt(inputMessage);
+			option = this.readInt(InputMessage.GET_OPTION.toString());
 
 			if ((option > 0) && (option <= Option.values().length))
 				this.writeln(Error.WRONG_MENU_OPTION.toString());
