@@ -3,6 +3,8 @@
  */
 package es.upm.miw.models;
 
+import java.util.Random;
+
 /**
  * @author FCL
  *
@@ -11,6 +13,15 @@ public class Card {
 	private CardNumber number;
 	private Suit pip;
 	private boolean upturned;
+
+	/**
+	 * @param upturned
+	 */
+	protected Card() {
+		this.number = CardNumber.values()[new Random().nextInt(CardNumber.values().length)];
+		this.pip = Suit.values()[new Random().nextInt(Suit.values().length)];
+		this.upturned = false;
+	}
 
 	/**
 	 * @param number
@@ -71,9 +82,20 @@ public class Card {
 	}
 
 	/**
-	 * 
+	 * @return
 	 */
-	protected void turn() {
+	protected Card turn() {
 		this.upturned = this.isUpturned() ? false : true;
+		return this;
+	}
+
+	/*
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object object) {
+		assert object != null;
+		Card card = (Card) object;
+		return ((this.number == card.number) && (this.pip == card.pip) && (this.upturned == card.upturned));
 	}
 }
