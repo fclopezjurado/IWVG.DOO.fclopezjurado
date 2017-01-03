@@ -84,16 +84,18 @@ public class IO {
 	 * @param numberOfPiles
 	 * @return
 	 */
-	public int readPileNumber(String inputMessage, int numberOfPiles) {
+	public int readPileNumber(int numberOfPiles) {
 		int pileNumber = 0;
 
 		while (pileNumber == 0) {
-			pileNumber = this.readInt(inputMessage);
+			pileNumber = this.readInt(InputMessage.PILE_NUMBER + "[1," + numberOfPiles + "]: ");
 
 			if ((pileNumber > 0) && (pileNumber <= numberOfPiles))
 				return pileNumber;
-			else
+			else {
 				this.writeln(Error.INVALID_PILE_NUMBER.toString());
+				pileNumber = 0;
+			}
 		}
 
 		return pileNumber;
