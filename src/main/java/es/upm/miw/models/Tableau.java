@@ -196,15 +196,17 @@ public class Tableau {
 		 * PRINT PILES
 		 */
 
-		for (int pileIndex = 1; pileIndex <= Tableau.PILES; pileIndex++) {
+		for (int pileIndex = 1; pileIndex <= PILES; pileIndex++) {
 			IO.getInstance().write("Escalera  " + pileIndex + ": ");
 
 			for (Card card : this.piles.get(pileIndex - 1).getCards()) {
 				if (card.isUpturned())
-					IO.getInstance().writeln(card.toString());
+					IO.getInstance().write(card.toString());
 				else
 					IO.getInstance().write("[");
 			}
+			
+			IO.getInstance().writeln();
 		}
 
 		IO.getInstance().writeGameMenu();
