@@ -25,6 +25,11 @@ public class Tableau {
 	 * 
 	 */
 	protected Tableau() {
+		this.deck = new Deck();
+		this.waste = new Pile();
+		this.foundations = new HashMap<Suit, Pile>();
+		this.piles = new ArrayList<Pile>();
+		
 		this.initDeck();
 		this.initFoundations();
 		this.initPiles();
@@ -78,8 +83,6 @@ public class Tableau {
 	 * 
 	 */
 	private void initFoundations() {
-		this.foundations = new HashMap<Suit, Pile>();
-
 		for (Suit suit : Suit.values())
 			this.foundations.put(suit, new Pile());
 	}
@@ -88,15 +91,18 @@ public class Tableau {
 	 * 
 	 */
 	private void initPiles() {
-		for (int numberOfPiles = 1; numberOfPiles <= Tableau.PILES; numberOfPiles++)
+		for (int numberOfPiles = 1; numberOfPiles <= Tableau.PILES; numberOfPiles++) {
+			Pile pile = new Pile();
+			
 			for (int cardsInPile = Tableau.PILES; cardsInPile >= numberOfPiles; cardsInPile--) {
-				Pile pile = new Pile();
-
-				if (cardsInPile == Tableau.PILES)
+				if (cardsInPile == numberOfPiles)
 					pile.push(this.deck.pull().turn());
 				else
 					pile.push(this.deck.pull());
 			}
+
+			this.piles.add(pile);
+		}
 	}
 
 	/**
@@ -184,6 +190,7 @@ public class Tableau {
 					IO.getInstance().write("[");
 			}
 		}
-			
+		
+		IO.getInstance().writeGameMenu();
 	}
 }
