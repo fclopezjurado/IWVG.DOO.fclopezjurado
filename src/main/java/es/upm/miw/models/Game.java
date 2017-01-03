@@ -22,7 +22,7 @@ public class Game {
 	/**
 	 * @return the state
 	 */
-	protected State getState() {
+	public State getState() {
 		return state;
 	}
 
@@ -30,14 +30,14 @@ public class Game {
 	 * @param state
 	 *            the state to set
 	 */
-	protected void setState(State state) {
+	public void setState(State state) {
 		this.state = state;
 	}
 
 	/**
 	 * @return the tableau
 	 */
-	protected Tableau getTableau() {
+	public Tableau getTableau() {
 		return tableau;
 	}
 }
