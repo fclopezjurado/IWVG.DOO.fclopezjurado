@@ -13,13 +13,11 @@ import es.upm.miw.utils.IO;
  *
  */
 public class Tableau {
-	protected static final int CARDS = 40;
-	protected static final int PILES = 7;
-	protected static final int CARDS_IN_WASTE = 3;
+	public static final int PILES = 7;
 
 	private Deck deck;
-	private Pile waste;
-	private HashMap<Suit, Pile> foundations;
+	private Waste waste;
+	private HashMap<Suit, Foundation> foundations;
 	private ArrayList<Pile> piles;
 
 	/**
@@ -27,8 +25,8 @@ public class Tableau {
 	 */
 	protected Tableau() {
 		this.deck = new Deck();
-		this.waste = new Pile();
-		this.foundations = new HashMap<Suit, Pile>();
+		this.waste = new Waste();
+		this.foundations = new HashMap<Suit, Foundation>();
 		this.piles = new ArrayList<Pile>();
 
 		this.initDeck();
@@ -40,10 +38,10 @@ public class Tableau {
 	 * 
 	 */
 	private void initDeck() {
-		while (this.deck.numberOfCards() < Tableau.CARDS) {
+		while (this.deck.numberOfCards() < Deck.SIZE) {
 			Card card = new Card();
 
-			if (!this.deck.isCardInStack(card))
+			if (!this.deck.isStackable(card))
 				this.deck.push(card);
 		}
 	}
@@ -53,17 +51,17 @@ public class Tableau {
 	 */
 	private void initFoundations() {
 		for (Suit suit : Suit.values())
-			this.foundations.put(suit, new Pile());
+			this.foundations.put(suit, new Foundation());
 	}
 
 	/**
 	 * 
 	 */
 	private void initPiles() {
-		for (int numberOfPiles = 1; numberOfPiles <= Tableau.PILES; numberOfPiles++) {
+		for (int numberOfPiles = 1; numberOfPiles <= PILES; numberOfPiles++) {
 			Pile pile = new Pile();
 
-			for (int cardsInPile = Tableau.PILES; cardsInPile >= numberOfPiles; cardsInPile--) {
+			for (int cardsInPile = PILES; cardsInPile >= numberOfPiles; cardsInPile--) {
 				if (cardsInPile == numberOfPiles)
 					pile.push(this.deck.pull().turn());
 				else
@@ -78,7 +76,7 @@ public class Tableau {
 	 * @return
 	 */
 	public boolean areFoundationsFull() {
-		for (HashMap.Entry<Suit, Pile> foundation : this.foundations.entrySet())
+		for (HashMap.Entry<Suit, Foundation> foundation : this.foundations.entrySet())
 			if (foundation.getValue().numberOfCards() < CardNumber.values().length)
 				return false;
 
@@ -107,7 +105,7 @@ public class Tableau {
 	 */
 	public void moveToWaste() {
 		this.moveToDeck();
-		this.moveCards(this.deck, this.waste, CARDS_IN_WASTE);
+		this.moveCards(this.deck, this.waste, Waste.SIZE);
 		this.waste.upturnCards();
 	}
 
@@ -115,7 +113,7 @@ public class Tableau {
 	 * 
 	 */
 	public void moveToDeck() {
-		this.moveCards(this.waste, this.deck, CARDS_IN_WASTE);
+		this.moveCards(this.waste, this.deck, Waste.SIZE);
 	}
 
 	/**
@@ -124,12 +122,24 @@ public class Tableau {
 	public boolean moveFromWasteToFoundation() {
 		if (!this.waste.isEmpty()) {
 			Card firstCardInWaste = this.waste.getFirstCard();
-			Pile involvedFoundation = this.foundations.get(firstCardInWaste.getPip());
-
-			if ((involvedFoundation.isEmpty() && (firstCardInWaste.getNumber() == CardNumber.ONE))
-					|| (!involvedFoundation.isEmpty()
-							&& (firstCardInWaste.isConsecutive(involvedFoundation.getFirstCard())))) {
+			Foundation involvedFoundation = this.foundations.get(firstCardInWaste.getPip());
+			
+			if (involvedFoundation.isStackable(firstCardInWaste)) {
 				involvedFoundation.push(this.waste.pull());
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public boolean moveFromWasteToPile(int numberOfPile) {
+		if (!this.waste.isEmpty()) {
+			Card firstCardInWaste = this.waste.getFirstCard();
+			Pile involvedPile = this.piles.get(numberOfPile - 1);
+
+			if (involvedPile.isStackable(firstCardInWaste)) {
+				involvedPile.push(this.waste.pull());
 				return true;
 			}
 		}
@@ -173,7 +183,7 @@ public class Tableau {
 		 * PRINT FOUNDATIONS
 		 */
 
-		for (HashMap.Entry<Suit, Pile> foundation : this.foundations.entrySet()) {
+		for (HashMap.Entry<Suit, Foundation> foundation : this.foundations.entrySet()) {
 			IO.getInstance().write("Palo " + foundation.getKey().toString() + ": ");
 
 			if (foundation.getValue().isEmpty())
