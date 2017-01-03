@@ -158,13 +158,6 @@ public class IO {
 		for (int option = 1; option <= Option.values().length; option++)
 			this.writeln(option + ". " + Option.values()[option - 1].toString());
 	}
-	
-	/**
-	 * 
-	 */
-	public void writeVictory() {
-		this.writeln(InputMessage.GAME_HAS_BEEN_FINISHED.toString());
-	}
 
 	/**
 	 * @param formatError
