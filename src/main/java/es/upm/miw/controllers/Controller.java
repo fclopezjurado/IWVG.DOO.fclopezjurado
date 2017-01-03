@@ -27,5 +27,5 @@ public abstract class Controller {
 		return game;
 	}
 
-	protected abstract void execute();
+	public abstract void execute();
 }
