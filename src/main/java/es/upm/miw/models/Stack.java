@@ -69,15 +69,6 @@ public abstract class Stack {
 	 * @param card
 	 */
 	protected abstract void push(Card card);
-
-	/**
-	 * 
-	 */
-	protected void turnFirstCard() {
-		assert this.numberOfCards() > 0;
-
-		this.cards.get(this.numberOfCards() - 1).turn();
-	}
 	
 	/**
 	 * @param card
@@ -90,5 +81,12 @@ public abstract class Stack {
 					return true;
 		
 		return false;
+	}
+	
+	/**
+	 * @return
+	 */
+	protected boolean isEmpty() {
+		return this.cards.isEmpty();
 	}
 }
