@@ -25,6 +25,13 @@ public abstract class Stack {
 	protected ArrayList<Card> getCards() {
 		return cards;
 	}
+	
+	/**
+	 * @return
+	 */
+	protected Card getFirstCard() {
+		return this.cards.get(this.numberOfCards() - 1);
+	}
 
 	/**
 	 * @return
