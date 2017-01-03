@@ -10,7 +10,8 @@ package es.upm.miw.utils;
 public enum InputMessage {
 	GET_OPTION("Opción? [1-" + Option.values().length + "]: "),
 	GAME_HAS_BEEN_FINISHED("Victoria!!!!"),
-	EXIT("Adios!!!");
+	EXIT("Adios!!!"),
+	PILE_NUMBER("A qué escalera? ");
 	
 	private String inputMessage;
 
