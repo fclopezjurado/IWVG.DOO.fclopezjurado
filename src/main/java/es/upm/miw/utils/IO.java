@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class IO {
 	private static final String INT_FORMAT = "entero";
 	private static final String CHAR_FORMAT = "caracter";
+	private static final String DOUBLE_HORIZONTAL_LINE = "===========================";
+	private static final String SINGLE_HORIZONTAL_LINE = "---------------------------";
 	private static IO io;
 	private BufferedReader bufferedReader;
 
@@ -49,7 +51,7 @@ public class IO {
 				input = Integer.parseInt(bufferedReader.readLine());
 				ok = true;
 			} catch (Exception ex) {
-				this.writeFormatError(IO.INT_FORMAT);
+				this.writeFormatError(INT_FORMAT);
 			}
 		}
 
@@ -117,7 +119,7 @@ public class IO {
 				if (!OK)
 					this.writeln(Error.INVALID_SUIT.toString());
 			} catch (Exception ex) {
-				this.writeFormatError(IO.CHAR_FORMAT);
+				this.writeFormatError(CHAR_FORMAT);
 			}
 		}
 
@@ -143,6 +145,23 @@ public class IO {
 	 */
 	public void writeln(String string) {
 		System.out.println(string);
+	}
+	
+	/**
+	 * 
+	 */
+	public void writeDoubleHorizontalLine() {
+		System.out.println(DOUBLE_HORIZONTAL_LINE);
+	}
+	
+	/**
+	 * 
+	 */
+	public void writeGameMenu() {
+		this.writeln(SINGLE_HORIZONTAL_LINE);
+		
+		for (int option = 1; option <= Option.values().length; option++)
+			this.writeln(option + ". " + Option.values()[option - 1].toString());
 	}
 
 	/**
