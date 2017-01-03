@@ -8,7 +8,7 @@ package es.upm.miw.models;
  *
  */
 public enum CardNumber {
-	ONE("1"), TWO("2"), THREE("3"), FOUR("4"), FIVE("5"), SIX("6"), SEVEN("7"), JACK("J"), HORSE("Q"), KING("K");
+	ONE("A"), TWO("2"), THREE("3"), FOUR("4"), FIVE("5"), SIX("6"), SEVEN("7"), JACK("J"), HORSE("Q"), KING("K");
 
 	private String cardNumber;
 
