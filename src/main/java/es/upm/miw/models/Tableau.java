@@ -15,6 +15,7 @@ import es.upm.miw.utils.IO;
 public class Tableau {
 	protected static final int CARDS = 40;
 	protected static final int PILES = 7;
+	protected static final int CARDS_IN_WASTE = 3;
 
 	private Deck deck;
 	private Pile waste;
@@ -33,38 +34,6 @@ public class Tableau {
 		this.initDeck();
 		this.initFoundations();
 		this.initPiles();
-	}
-
-	/**
-	 * @return the deck
-	 */
-	protected Deck getDeck() {
-		return deck;
-	}
-
-	/**
-	 * @return the waste
-	 */
-	protected Pile getWaste() {
-		return waste;
-	}
-
-	/**
-	 * @param pip
-	 * @return
-	 */
-	protected Pile getFoundation(Suit pip) {
-		assert pip != null;
-		return this.foundations.get(pip);
-	}
-
-	/**
-	 * @param index
-	 * @return
-	 */
-	protected Pile getPile(int index) {
-		assert index > 0;
-		return this.piles.get(index);
 	}
 
 	/**
@@ -108,7 +77,7 @@ public class Tableau {
 	/**
 	 * @return
 	 */
-	protected boolean areFoundationsFull() {
+	public boolean areFoundationsFull() {
 		for (HashMap.Entry<Suit, Pile> foundation : this.foundations.entrySet())
 			if (foundation.getValue().numberOfCards() < CardNumber.values().length)
 				return false;
@@ -121,10 +90,13 @@ public class Tableau {
 	 * @param destiny
 	 * @param cards
 	 */
-	protected void moveCards(Stack origin, Stack destiny, int cards) {
+	private void moveCards(Stack origin, Stack destiny, int cards) {
 		assert origin != null;
 		assert destiny != null;
 		assert cards > 0;
+		
+		if (cards > origin.numberOfCards())
+			cards = origin.numberOfCards();
 
 		for (int index = 0; index < cards; index++)
 			destiny.push(origin.pull());
@@ -133,8 +105,16 @@ public class Tableau {
 	/**
 	 * 
 	 */
+	public void moveToWaste() {
+		this.moveCards(this.deck, this.waste, CARDS_IN_WASTE);
+		this.waste.upturnCards();
+	}
+	
+	/**
+	 * 
+	 */
 	public void write() {
-		IO.getInstance().writeDoubleHorizontalLine();
+		IO.getInstance().writeln(IO.DOUBLE_HORIZONTAL_LINE);
 		
 		/**
 		 * PRINT DECK
