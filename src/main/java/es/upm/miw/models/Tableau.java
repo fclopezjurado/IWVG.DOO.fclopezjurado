@@ -6,6 +6,8 @@ package es.upm.miw.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import es.upm.miw.utils.IO;
+
 /**
  * @author FCL
  *
@@ -120,5 +122,68 @@ public class Tableau {
 
 		for (int index = 0; index < cards; index++)
 			destiny.push(origin.pull());
+	}
+	
+	/**
+	 * 
+	 */
+	protected void write() {
+		IO.getInstance().writeDoubleHorizontalLine();
+		
+		/**
+		 * PRINT DECK
+		 */
+		
+		IO.getInstance().write("Baraja: ");
+		
+		if (this.deck.numberOfCards() == 0)
+			IO.getInstance().writeln("<vacío>");
+		else
+			IO.getInstance().writeln("[X,X]");
+		
+		/**
+		 * PRINT WASTE
+		 */
+		
+		IO.getInstance().write("Descarte: ");
+		
+		if (this.waste.numberOfCards() == 0)
+			IO.getInstance().writeln("<vacío>");
+		else {
+			for (Card card : this.waste.getCards())
+					IO.getInstance().write("[" + card.getNumber().toString() + "," + card.getPip().toString() + "]");
+			
+			IO.getInstance().writeln();
+		}
+		
+		/**
+		 * PRINT FOUNDATIONS
+		 */
+		
+		for (HashMap.Entry<Suit, Pile> foundation : this.foundations.entrySet()) {
+			IO.getInstance().write("Palo " + foundation.getKey().toString() + ": ");
+			
+			if (foundation.getValue().numberOfCards() == 0)
+				IO.getInstance().writeln("<vacío>");
+			else
+				IO.getInstance().writeln("[" + foundation.getValue().getFirstCard().getNumber().toString() 
+						+ "," + foundation.getValue().getFirstCard().getPip().toString());
+		}
+		
+		/**
+		 * PRINT PILES
+		 */
+		
+		for (int pileIndex = 1; pileIndex <= Tableau.PILES; pileIndex++) {
+			IO.getInstance().write("Escalera  " + pileIndex + ": ");
+			
+			for (Card card : this.piles.get(pileIndex - 1).getCards()) {
+				if (card.isUpturned())
+					IO.getInstance().writeln("[" + card.getNumber().toString() + "," + card.getPip().toString() + "]");
+				else
+					IO.getInstance().write("[");
+			}
+		}
+			
 	}
 }
