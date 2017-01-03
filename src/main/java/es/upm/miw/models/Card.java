@@ -98,4 +98,20 @@ public class Card {
 		Card card = (Card) object;
 		return ((this.number == card.number) && (this.pip == card.pip) && (this.upturned == card.upturned));
 	}
+
+	/*
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "[" + this.number.toString() + "," + this.pip.toString() + "]";
+	}
+	
+	/**
+	 * @param card
+	 * @return
+	 */
+	protected boolean isConsecutive(Card card) {
+		return ((this.pip == card.pip) && (this.number.ordinal() == (card.number.ordinal() + 1)));
+	}
 }
