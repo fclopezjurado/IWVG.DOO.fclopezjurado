@@ -121,6 +121,25 @@ public class Tableau {
 	/**
 	 * 
 	 */
+	public boolean moveFromWasteToFoundation() {
+		if (!this.waste.isEmpty()) {
+			Card firstCardInWaste = this.waste.getFirstCard();
+			Pile involvedFoundation = this.foundations.get(firstCardInWaste.getPip());
+
+			if ((involvedFoundation.isEmpty() && (firstCardInWaste.getNumber() == CardNumber.ONE))
+					|| (!involvedFoundation.isEmpty()
+							&& (firstCardInWaste.isConsecutive(involvedFoundation.getFirstCard())))) {
+				involvedFoundation.push(this.waste.pull());
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 
+	 */
 	public void write() {
 		IO.getInstance().writeln(IO.DOUBLE_HORIZONTAL_LINE);
 
@@ -145,7 +164,7 @@ public class Tableau {
 			IO.getInstance().writeln("<vacío>");
 		else {
 			for (Card card : this.waste.getCards())
-				IO.getInstance().write("[" + card.getNumber().toString() + "," + card.getPip().toString() + "]");
+				IO.getInstance().write(card.toString());
 
 			IO.getInstance().writeln();
 		}
@@ -160,8 +179,7 @@ public class Tableau {
 			if (foundation.getValue().isEmpty())
 				IO.getInstance().writeln("<vacío>");
 			else
-				IO.getInstance().writeln("[" + foundation.getValue().getFirstCard().getNumber().toString() + ","
-						+ foundation.getValue().getFirstCard().getPip().toString());
+				IO.getInstance().writeln(foundation.getValue().getFirstCard().toString());
 		}
 
 		/**
@@ -173,7 +191,7 @@ public class Tableau {
 
 			for (Card card : this.piles.get(pileIndex - 1).getCards()) {
 				if (card.isUpturned())
-					IO.getInstance().writeln("[" + card.getNumber().toString() + "," + card.getPip().toString() + "]");
+					IO.getInstance().writeln(card.toString());
 				else
 					IO.getInstance().write("[");
 			}
