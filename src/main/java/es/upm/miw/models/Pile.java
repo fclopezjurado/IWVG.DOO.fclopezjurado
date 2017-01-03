@@ -23,13 +23,14 @@ public class Pile extends Stack {
 		assert card != null;
 		this.getCards().add(card);
 	}
-	
+
 	/**
-	 * 
+	 * @param card
+	 * @return
 	 */
-	public void upturnCards() {
-		for (Card card : this.getCards())
-			if (!card.isUpturned())
-				card.turn();
+	protected boolean isStackable(Card card) {
+		return ((this.isEmpty() && (card.getNumber() == CardNumber.KING)) || (!this.isEmpty() 
+				&& (this.getFirstCard().getPip() != card.getPip()) 
+				&& ((this.getFirstCard().getNumber().ordinal() + 1) == card.getNumber().ordinal())));
 	}
 }
