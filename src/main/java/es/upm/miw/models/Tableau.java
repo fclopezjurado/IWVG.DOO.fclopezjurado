@@ -127,7 +127,7 @@ public class Tableau {
 	/**
 	 * 
 	 */
-	protected void write() {
+	public void write() {
 		IO.getInstance().writeDoubleHorizontalLine();
 		
 		/**
