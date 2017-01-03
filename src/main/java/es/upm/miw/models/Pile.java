@@ -23,4 +23,13 @@ public class Pile extends Stack {
 		assert card != null;
 		this.getCards().add(card);
 	}
+	
+	/**
+	 * 
+	 */
+	public void upturnCards() {
+		for (Card card : this.getCards())
+			if (!card.isUpturned())
+				card.turn();
+	}
 }
