@@ -52,26 +52,10 @@ public class Card {
 	}
 
 	/**
-	 * @param number
-	 *            the number to set
-	 */
-	protected void setNumber(CardNumber number) {
-		this.number = number;
-	}
-
-	/**
 	 * @return the pip
 	 */
 	protected Suit getPip() {
 		return pip;
-	}
-
-	/**
-	 * @param pip
-	 *            the pip to set
-	 */
-	protected void setPip(Suit pip) {
-		this.pip = pip;
 	}
 
 	/**
@@ -105,13 +89,5 @@ public class Card {
 	@Override
 	public String toString() {
 		return "[" + this.number.toString() + "," + this.pip.toString() + "]";
-	}
-	
-	/**
-	 * @param card
-	 * @return
-	 */
-	protected boolean isConsecutive(Card card) {
-		return ((this.pip == card.pip) && (this.number.ordinal() == (card.number.ordinal() + 1)));
 	}
 }
