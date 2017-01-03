@@ -64,6 +64,13 @@ public abstract class Stack {
 
 		return card;
 	}
+	
+	/**
+	 * @return
+	 */
+	protected boolean isEmpty() {
+		return this.cards.isEmpty();
+	}
 
 	/**
 	 * @param card
@@ -74,19 +81,5 @@ public abstract class Stack {
 	 * @param card
 	 * @return
 	 */
-	protected boolean isCardInStack(Card card) {
-		if (this.numberOfCards() > 0)
-			for (Card cardInDeck : this.getCards())
-				if (cardInDeck.equals(card))
-					return true;
-		
-		return false;
-	}
-	
-	/**
-	 * @return
-	 */
-	protected boolean isEmpty() {
-		return this.cards.isEmpty();
-	}
+	protected abstract boolean isStackable(Card card);
 }
