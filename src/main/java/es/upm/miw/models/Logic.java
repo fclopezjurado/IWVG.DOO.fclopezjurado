@@ -16,6 +16,7 @@ import es.upm.miw.controllers.MovementFromWasteToPileController;
 import es.upm.miw.controllers.StartController;
 import es.upm.miw.controllers.TurnController;
 import es.upm.miw.utils.IO;
+import es.upm.miw.utils.InputMessage;
 
 /**
  * @author FCL
@@ -56,8 +57,10 @@ public class Logic {
 	private Controller getMovementController() {
 		int movementControllerIndex = IO.getInstance().readMenuOption();
 		
-		if (movementControllerIndex > this.movementControllers.size())
+		if (movementControllerIndex > this.movementControllers.size()) {
+			IO.getInstance().writeln(InputMessage.EXIT.toString());
 			return null;
+		}
 		
 		return this.movementControllers.get(movementControllerIndex - 1);
 	}
