@@ -30,7 +30,7 @@ public class Tableau {
 		this.waste = new Pile();
 		this.foundations = new HashMap<Suit, Pile>();
 		this.piles = new ArrayList<Pile>();
-		
+
 		this.initDeck();
 		this.initFoundations();
 		this.initPiles();
@@ -62,7 +62,7 @@ public class Tableau {
 	private void initPiles() {
 		for (int numberOfPiles = 1; numberOfPiles <= Tableau.PILES; numberOfPiles++) {
 			Pile pile = new Pile();
-			
+
 			for (int cardsInPile = Tableau.PILES; cardsInPile >= numberOfPiles; cardsInPile--) {
 				if (cardsInPile == numberOfPiles)
 					pile.push(this.deck.pull().turn());
@@ -94,75 +94,83 @@ public class Tableau {
 		assert origin != null;
 		assert destiny != null;
 		assert cards > 0;
-		
+
 		if (cards > origin.numberOfCards())
 			cards = origin.numberOfCards();
 
 		for (int index = 0; index < cards; index++)
 			destiny.push(origin.pull());
 	}
-	
+
 	/**
 	 * 
 	 */
 	public void moveToWaste() {
+		this.moveToDeck();
 		this.moveCards(this.deck, this.waste, CARDS_IN_WASTE);
 		this.waste.upturnCards();
 	}
-	
+
+	/**
+	 * 
+	 */
+	public void moveToDeck() {
+		this.moveCards(this.waste, this.deck, CARDS_IN_WASTE);
+	}
+
 	/**
 	 * 
 	 */
 	public void write() {
 		IO.getInstance().writeln(IO.DOUBLE_HORIZONTAL_LINE);
-		
+
 		/**
 		 * PRINT DECK
 		 */
-		
+
 		IO.getInstance().write("Baraja: ");
-		
-		if (this.deck.numberOfCards() == 0)
+
+		if (this.deck.isEmpty())
 			IO.getInstance().writeln("<vacío>");
 		else
 			IO.getInstance().writeln("[X,X]");
-		
+
 		/**
 		 * PRINT WASTE
 		 */
-		
+
 		IO.getInstance().write("Descarte: ");
-		
-		if (this.waste.numberOfCards() == 0)
+
+		if (this.waste.isEmpty())
 			IO.getInstance().writeln("<vacío>");
 		else {
 			for (Card card : this.waste.getCards())
-					IO.getInstance().write("[" + card.getNumber().toString() + "," + card.getPip().toString() + "]");
-			
+				IO.getInstance().write("[" + card.getNumber().toString() + "," + card.getPip().toString() + "]");
+
 			IO.getInstance().writeln();
 		}
-		
+
 		/**
 		 * PRINT FOUNDATIONS
 		 */
-		
+
 		for (HashMap.Entry<Suit, Pile> foundation : this.foundations.entrySet()) {
 			IO.getInstance().write("Palo " + foundation.getKey().toString() + ": ");
-			
-			if (foundation.getValue().numberOfCards() == 0)
+
+			if (foundation.getValue().isEmpty())
 				IO.getInstance().writeln("<vacío>");
 			else
-				IO.getInstance().writeln("[" + foundation.getValue().getFirstCard().getNumber().toString() 
-						+ "," + foundation.getValue().getFirstCard().getPip().toString());
+				IO.getInstance().writeln("[" + foundation.getValue().getFirstCard().getNumber().toString() + ","
+						+ foundation.getValue().getFirstCard().getPip().toString());
 		}
-		
+
 		/**
 		 * PRINT PILES
 		 */
-		
+
 		for (int pileIndex = 1; pileIndex <= Tableau.PILES; pileIndex++) {
 			IO.getInstance().write("Escalera  " + pileIndex + ": ");
-			
+
 			for (Card card : this.piles.get(pileIndex - 1).getCards()) {
 				if (card.isUpturned())
 					IO.getInstance().writeln("[" + card.getNumber().toString() + "," + card.getPip().toString() + "]");
@@ -170,7 +178,7 @@ public class Tableau {
 					IO.getInstance().write("[");
 			}
 		}
-		
+
 		IO.getInstance().writeGameMenu();
 	}
 }
