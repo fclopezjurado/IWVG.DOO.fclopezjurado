@@ -4,6 +4,8 @@
 package es.upm.miw.controllers;
 
 import es.upm.miw.models.Game;
+import es.upm.miw.models.State;
+import es.upm.miw.models.Tableau;
 
 /**
  * @author FCL
@@ -21,10 +23,25 @@ public abstract class Controller {
 	}
 	
 	/**
-	 * @return the game
+	 * @return
 	 */
-	protected Game getGame() {
-		return game;
+	protected Tableau getTableau() {
+		return this.game.getTableau();
+	}
+	
+	/**
+	 * @return
+	 */
+	protected State getState() {
+		return this.game.getState();
+	}
+	
+	/**
+	 * @param state
+	 */
+	protected void setState(State state) {
+		assert state != null;
+		this.game.setState(state);
 	}
 
 	public abstract void execute();
