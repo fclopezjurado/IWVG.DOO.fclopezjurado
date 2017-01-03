@@ -4,22 +4,27 @@
 package es.upm.miw.controllers;
 
 import es.upm.miw.models.Game;
+import es.upm.miw.models.State;
 
 /**
  * @author FCL
  *
  */
 public class StartController extends Controller {
-
+	/**
+	 * @param game
+	 */
 	public StartController(Game game) {
 		super(game);
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
+		assert this.getState() == State.INITIAL;
+		this.getTableau().write();
+		this.setState(State.IN_GAME);
 	}
-
 }
