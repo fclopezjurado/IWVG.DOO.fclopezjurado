@@ -32,8 +32,8 @@ public class Deck extends Stack {
 		if (this.numberOfCards() > 0)
 			for (Card cardInDeck : this.getCards())
 				if (cardInDeck.equals(card))
-					return true;
+					return false;
 		
-		return false;
+		return true;
 	}
 }
