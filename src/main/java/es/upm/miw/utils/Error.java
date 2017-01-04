@@ -14,7 +14,9 @@ public enum Error {
 	INVALID_SUIT("ERROR!!! El palo no existe"),
 	INVALID_MOVEMENT_FROM_WASTE_TO_FOUNDATION("ERROR!!! No se pudo mover de descarte a palo"),
 	INVALID_MOVEMENT_FROM_WASTE_TO_PILE("ERROR!!! No se pudo mover de descarte a escalera"),
-	INVALID_MOVEMENT_FROM_PILE_TO_FOUNDATION("ERROR!!! No se pudo mover de escalera a palo");
+	INVALID_MOVEMENT_FROM_PILE_TO_FOUNDATION("ERROR!!! No se pudo mover de escalera a palo"),
+	INVALID_NUMBER_OF_CARD_TO_MOVE("ERROR!!! Se debe mover al menos una carta"),
+	INVALID_MOVEMENT_FROM_PILE_TO_PILE("ERROR!!! No se pudo mover de palo a palo");
 	
 	private String errorMessage;
 
