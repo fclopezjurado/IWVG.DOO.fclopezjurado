@@ -170,6 +170,22 @@ public class Tableau {
 
 		return false;
 	}
+	
+	/**
+	 * @param numberOfPile
+	 * @return
+	 */
+	public boolean turnCardInPile(int numberOfPile) {
+		assert ((numberOfPile > 0) && (numberOfPile <= PILES));
+		
+		Pile involvedPile = this.piles.get(numberOfPile - 1);
+		
+		if (involvedPile.getFirstCard().isUpturned())
+			return false;
+		
+		involvedPile.turnFirstCard();
+		return true;
+	}
 
 	/**
 	 * 
