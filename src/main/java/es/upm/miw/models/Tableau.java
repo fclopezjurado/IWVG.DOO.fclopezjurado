@@ -14,6 +14,7 @@ import es.upm.miw.utils.IO;
  */
 public class Tableau {
 	public static final int PILES = 7;
+	public static final int FOUNDATIONS = Suit.values().length;
 
 	private Deck deck;
 	private Waste waste;
@@ -219,6 +220,22 @@ public class Tableau {
 				this.moveCards(auxiliarPile, originPile, cards, false);
 		}
 		
+		return false;
+	}
+	
+	/**
+	 * @param numberOfPile
+	 * @return
+	 */
+	public boolean moveFromFoundationToPile(int foundation, int destiny) {
+		assert ((foundation > 0) && (foundation <= FOUNDATIONS));
+		assert ((destiny > 0) && (destiny <= PILES));
+		
+		Foundation involvedFoundation = this.foundations.get(Suit.values()[foundation - 1]);
+		
+		if (!involvedFoundation.isEmpty())
+			return this.moveCards(involvedFoundation, this.getPile(destiny - 1), 1, true);
+
 		return false;
 	}
 
