@@ -43,19 +43,6 @@ public abstract class Stack {
 	/**
 	 * @return
 	 */
-	protected int numberOfUpturnedCards() {
-		int numberOfUpturnedCards = 0;
-
-		for (Card card : this.cards)
-			if (card.isUpturned())
-				numberOfUpturnedCards++;
-
-		return numberOfUpturnedCards;
-	}
-
-	/**
-	 * @return
-	 */
 	protected Card pull() {
 		assert this.numberOfCards() > 0;
 
