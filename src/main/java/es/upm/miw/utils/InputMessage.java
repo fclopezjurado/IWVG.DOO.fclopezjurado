@@ -11,7 +11,8 @@ public enum InputMessage {
 	GET_OPTION("Opción? [1-" + Option.values().length + "]: "),
 	GAME_HAS_BEEN_FINISHED("Victoria!!!!"),
 	EXIT("Adios!!!"),
-	PILE_NUMBER("A qué escalera? ");
+	PILE_NUMBER("Escalera? "),
+	NUMBER_OF_CARDS_TO_MOVE("Cuántas cartas? ");
 	
 	private String inputMessage;
 
