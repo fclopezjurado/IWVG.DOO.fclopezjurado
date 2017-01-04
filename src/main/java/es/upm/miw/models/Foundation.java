@@ -31,6 +31,6 @@ public class Foundation extends Stack {
 	protected boolean isStackable(Card card) {
 		return ((this.isEmpty() && (card.getNumber() == CardNumber.ONE)) || (!this.isEmpty() 
 				&& (this.getFirstCard().getPip() == card.getPip()) 
-				&& (this.getFirstCard().getNumber().ordinal() == (card.getNumber().ordinal() + 1))));
+				&& ((this.getFirstCard().getNumber().ordinal() + 1) == card.getNumber().ordinal())));
 	}
 }
