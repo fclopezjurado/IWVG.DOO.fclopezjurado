@@ -33,4 +33,12 @@ public class Pile extends Stack {
 				&& (this.getFirstCard().getPip() != card.getPip()) 
 				&& (this.getFirstCard().getNumber().ordinal() == (card.getNumber().ordinal() + 1))));
 	}
+	
+	/**
+	 * 
+	 */
+	protected void turnFirstCard() {
+		if (!this.isEmpty())
+			this.getCards().get(this.numberOfCards() - 1).turn();
+	}
 }
