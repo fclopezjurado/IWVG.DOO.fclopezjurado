@@ -33,6 +33,14 @@ public class Tableau {
 		this.initFoundations();
 		this.initPiles();
 	}
+	
+	/**
+	 * @param suit
+	 * @return
+	 */
+	private Foundation getFoundation(Suit suit) {
+		return this.foundations.get(suit);
+	}
 
 	/**
 	 * 
@@ -41,7 +49,7 @@ public class Tableau {
 		while (this.deck.numberOfCards() < Deck.SIZE) {
 			Card card = new Card();
 
-			if (!this.deck.isStackable(card))
+			if (this.deck.isStackable(card))
 				this.deck.push(card);
 		}
 	}
@@ -61,13 +69,10 @@ public class Tableau {
 		for (int numberOfPiles = 1; numberOfPiles <= PILES; numberOfPiles++) {
 			Pile pile = new Pile();
 
-			for (int cardsInPile = PILES; cardsInPile >= numberOfPiles; cardsInPile--) {
-				if (cardsInPile == numberOfPiles)
-					pile.push(this.deck.pull().turn());
-				else
-					pile.push(this.deck.pull());
-			}
-
+			for (int cardsInPile = PILES; cardsInPile >= numberOfPiles; cardsInPile--)
+				pile.push(this.deck.pull());
+			
+			pile.turnFirstCard();
 			this.piles.add(pile);
 		}
 	}
@@ -76,73 +81,92 @@ public class Tableau {
 	 * @return
 	 */
 	public boolean areFoundationsFull() {
-		for (HashMap.Entry<Suit, Foundation> foundation : this.foundations.entrySet())
-			if (foundation.getValue().numberOfCards() < CardNumber.values().length)
+		for (Suit suit: Suit.values())
+			if (this.getFoundation(suit).numberOfCards() < CardNumber.values().length)
 				return false;
 
 		return true;
 	}
-
+	
 	/**
 	 * @param origin
 	 * @param destiny
 	 * @param cards
+	 * @return
 	 */
-	private void moveCards(Stack origin, Stack destiny, int cards) {
+	private boolean moveCards(Stack origin, Stack destiny, int cards) {
 		assert origin != null;
 		assert destiny != null;
 		assert cards > 0;
-
-		if (cards > origin.numberOfCards())
-			cards = origin.numberOfCards();
-
-		for (int index = 0; index < cards; index++)
-			destiny.push(origin.pull());
+		
+		if (origin.numberOfCards() >= cards) {
+			for (int index = 0; index < cards; index++) {
+				if (destiny.isStackable(origin.getFirstCard()))
+					destiny.push(origin.pull());
+				else
+					return false;
+			}
+				
+			return true;
+		}
+		
+		return false;
 	}
 
 	/**
 	 * 
 	 */
-	public void moveToWaste() {
+	public boolean moveToWaste() {
 		this.moveToDeck();
-		this.moveCards(this.deck, this.waste, Waste.SIZE);
-		this.waste.upturnCards();
+		boolean successful = this.moveCards(this.deck, this.waste, Waste.SIZE);
+		
+		if (successful)
+			this.waste.upturnCards();
+		
+		return successful;
 	}
 
 	/**
 	 * 
 	 */
-	public void moveToDeck() {
-		this.moveCards(this.waste, this.deck, Waste.SIZE);
+	public boolean moveToDeck() {
+		return this.moveCards(this.waste, this.deck, Waste.SIZE);
 	}
 
 	/**
 	 * 
 	 */
 	public boolean moveFromWasteToFoundation() {
-		if (!this.waste.isEmpty()) {
-			Card firstCardInWaste = this.waste.getFirstCard();
-			Foundation involvedFoundation = this.foundations.get(firstCardInWaste.getPip());
-			
-			if (involvedFoundation.isStackable(firstCardInWaste)) {
-				involvedFoundation.push(this.waste.pull());
-				return true;
-			}
-		}
+		if (!this.waste.isEmpty())
+			return this.moveCards(this.waste, this.getFoundation(this.waste.getFirstCard().getPip()), 1);
 
 		return false;
 	}
 
+	/**
+	 * @param numberOfPile
+	 * @return
+	 */
 	public boolean moveFromWasteToPile(int numberOfPile) {
-		if (!this.waste.isEmpty()) {
-			Card firstCardInWaste = this.waste.getFirstCard();
-			Pile involvedPile = this.piles.get(numberOfPile - 1);
+		assert ((numberOfPile > 0) && (numberOfPile <= PILES));
+		
+		if (!this.waste.isEmpty())
+			return this.moveCards(this.waste, this.piles.get(numberOfPile - 1), 1);
 
-			if (involvedPile.isStackable(firstCardInWaste)) {
-				involvedPile.push(this.waste.pull());
-				return true;
-			}
-		}
+		return false;
+	}
+	
+	/**
+	 * @param numberOfPile
+	 * @return
+	 */
+	public boolean moveFromPileToFoundation(int numberOfPile) {
+		assert ((numberOfPile > 0) && (numberOfPile <= PILES));
+		
+		Pile involvedPile = this.piles.get(numberOfPile - 1);
+		
+		if (!involvedPile.isEmpty())
+			return this.moveCards(involvedPile, this.getFoundation(involvedPile.getFirstCard().getPip()), 1);
 
 		return false;
 	}
@@ -172,24 +196,25 @@ public class Tableau {
 
 		if (this.waste.isEmpty())
 			IO.getInstance().writeln("<vacío>");
-		else {
-			for (Card card : this.waste.getCards())
-				IO.getInstance().write(card.toString());
-
-			IO.getInstance().writeln();
-		}
+		else
+			for (Card card : this.waste.getCards()) {
+				if (card.equals(this.waste.getFirstCard()))
+					IO.getInstance().writeln(card.toString());
+				else
+					IO.getInstance().write(card.toString());
+			}
 
 		/**
 		 * PRINT FOUNDATIONS
 		 */
 
-		for (HashMap.Entry<Suit, Foundation> foundation : this.foundations.entrySet()) {
-			IO.getInstance().write("Palo " + foundation.getKey().toString() + ": ");
-
-			if (foundation.getValue().isEmpty())
+		for (Suit suit : Suit.values()) {
+			IO.getInstance().write("Palo " + suit.toString() + ": ");
+			
+			if (this.getFoundation(suit).isEmpty())
 				IO.getInstance().writeln("<vacío>");
 			else
-				IO.getInstance().writeln(foundation.getValue().getFirstCard().toString());
+				IO.getInstance().writeln(this.getFoundation(suit).getFirstCard().toString());
 		}
 
 		/**
@@ -198,15 +223,15 @@ public class Tableau {
 
 		for (int pileIndex = 1; pileIndex <= PILES; pileIndex++) {
 			IO.getInstance().write("Escalera  " + pileIndex + ": ");
-
+			
 			for (Card card : this.piles.get(pileIndex - 1).getCards()) {
-				if (card.isUpturned())
-					IO.getInstance().write(card.toString());
+				if (card.equals(this.piles.get(pileIndex - 1).getFirstCard()) && card.isUpturned())
+					IO.getInstance().writeln(card.toString());
+				else if (card.equals(this.piles.get(pileIndex - 1).getFirstCard()))
+					IO.getInstance().writeln("[X,X]");
 				else
 					IO.getInstance().write("[");
 			}
-			
-			IO.getInstance().writeln();
 		}
 
 		IO.getInstance().writeGameMenu();
