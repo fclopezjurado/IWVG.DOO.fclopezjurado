@@ -41,6 +41,15 @@ public class Tableau {
 	private Foundation getFoundation(Suit suit) {
 		return this.foundations.get(suit);
 	}
+	
+	/**
+	 * @param index
+	 * @return
+	 */
+	private Pile getPile(int index) {
+		assert ((index > 0) && (index < PILES));
+		return this.piles.get(index);
+	}
 
 	/**
 	 * 
@@ -66,12 +75,9 @@ public class Tableau {
 	 * 
 	 */
 	private void initPiles() {
-		for (int numberOfPiles = 1; numberOfPiles <= PILES; numberOfPiles++) {
+		for (int numberOfPiles = 0; numberOfPiles < PILES; numberOfPiles++) {
 			Pile pile = new Pile();
-
-			for (int cardsInPile = PILES; cardsInPile >= numberOfPiles; cardsInPile--)
-				pile.push(this.deck.pull());
-			
+			this.moveCards(this.deck, pile, PILES - numberOfPiles, false);
 			pile.turnFirstCard();
 			this.piles.add(pile);
 		}
@@ -92,16 +98,17 @@ public class Tableau {
 	 * @param origin
 	 * @param destiny
 	 * @param cards
+	 * @param check
 	 * @return
 	 */
-	private boolean moveCards(Stack origin, Stack destiny, int cards) {
+	private boolean moveCards(Stack origin, Stack destiny, int cards, boolean check) {
 		assert origin != null;
 		assert destiny != null;
 		assert cards > 0;
 		
 		if (origin.numberOfCards() >= cards) {
 			for (int index = 0; index < cards; index++) {
-				if (destiny.isStackable(origin.getFirstCard()))
+				if (!check || (check && destiny.isStackable(origin.getFirstCard())))
 					destiny.push(origin.pull());
 				else
 					return false;
@@ -118,7 +125,7 @@ public class Tableau {
 	 */
 	public boolean moveToWaste() {
 		this.moveToDeck();
-		boolean successful = this.moveCards(this.deck, this.waste, Waste.SIZE);
+		boolean successful = this.moveCards(this.deck, this.waste, Waste.SIZE, true);
 		
 		if (successful)
 			this.waste.upturnCards();
@@ -130,7 +137,7 @@ public class Tableau {
 	 * 
 	 */
 	public boolean moveToDeck() {
-		return this.moveCards(this.waste, this.deck, Waste.SIZE);
+		return this.moveCards(this.waste, this.deck, Waste.SIZE, true);
 	}
 
 	/**
@@ -138,7 +145,7 @@ public class Tableau {
 	 */
 	public boolean moveFromWasteToFoundation() {
 		if (!this.waste.isEmpty())
-			return this.moveCards(this.waste, this.getFoundation(this.waste.getFirstCard().getPip()), 1);
+			return this.moveCards(this.waste, this.getFoundation(this.waste.getFirstCard().getPip()), 1, true);
 
 		return false;
 	}
@@ -151,7 +158,7 @@ public class Tableau {
 		assert ((numberOfPile > 0) && (numberOfPile <= PILES));
 		
 		if (!this.waste.isEmpty())
-			return this.moveCards(this.waste, this.piles.get(numberOfPile - 1), 1);
+			return this.moveCards(this.waste, this.getPile(numberOfPile - 1), 1, true);
 
 		return false;
 	}
@@ -163,10 +170,10 @@ public class Tableau {
 	public boolean moveFromPileToFoundation(int numberOfPile) {
 		assert ((numberOfPile > 0) && (numberOfPile <= PILES));
 		
-		Pile involvedPile = this.piles.get(numberOfPile - 1);
+		Pile involvedPile = this.getPile(numberOfPile - 1);
 		
 		if (!involvedPile.isEmpty())
-			return this.moveCards(involvedPile, this.getFoundation(involvedPile.getFirstCard().getPip()), 1);
+			return this.moveCards(involvedPile, this.getFoundation(involvedPile.getFirstCard().getPip()), 1, true);
 
 		return false;
 	}
@@ -178,13 +185,41 @@ public class Tableau {
 	public boolean turnCardInPile(int numberOfPile) {
 		assert ((numberOfPile > 0) && (numberOfPile <= PILES));
 		
-		Pile involvedPile = this.piles.get(numberOfPile - 1);
+		Pile involvedPile = this.getPile(numberOfPile - 1);
 		
 		if (involvedPile.getFirstCard().isUpturned())
 			return false;
 		
 		involvedPile.turnFirstCard();
 		return true;
+	}
+	
+	/**
+	 * @param origin
+	 * @param destiny
+	 * @param cards
+	 * @return
+	 */
+	public boolean moveFromPileToPile(int origin, int destiny, int cards) {
+		assert ((origin > 0) && (origin <= PILES));
+		assert ((destiny > 0) && (destiny <= PILES));
+		assert cards > 0;
+		
+		Pile originPile = this.getPile(origin - 1);
+		Pile destinyPile = this.getPile(destiny - 1);
+		Pile auxiliarPile = new Pile();
+		
+		if (originPile.numberOfUpturnedCards() >= cards) {
+			this.moveCards(originPile, auxiliarPile, cards, false);
+			boolean successful = this.moveCards(auxiliarPile, destinyPile, cards, true);
+			
+			if (successful)
+				return true;
+			else
+				this.moveCards(auxiliarPile, originPile, cards, false);
+		}
+		
+		return false;
 	}
 
 	/**
@@ -212,13 +247,12 @@ public class Tableau {
 
 		if (this.waste.isEmpty())
 			IO.getInstance().writeln("<vacío>");
-		else
-			for (Card card : this.waste.getCards()) {
-				if (card.equals(this.waste.getFirstCard()))
-					IO.getInstance().writeln(card.toString());
-				else
-					IO.getInstance().write(card.toString());
-			}
+		else {
+			for (Card card : this.waste.getCards())
+				IO.getInstance().write(card.toString());
+			
+			IO.getInstance().writeln();
+		}
 
 		/**
 		 * PRINT FOUNDATIONS
@@ -236,18 +270,20 @@ public class Tableau {
 		/**
 		 * PRINT PILES
 		 */
-
-		for (int pileIndex = 1; pileIndex <= PILES; pileIndex++) {
-			IO.getInstance().write("Escalera  " + pileIndex + ": ");
+		
+		for (Pile pile : this.piles) {
+			IO.getInstance().write("Escalera " + (this.piles.indexOf(pile) + 1) + ": ");
 			
-			for (Card card : this.piles.get(pileIndex - 1).getCards()) {
-				if (card.equals(this.piles.get(pileIndex - 1).getFirstCard()) && card.isUpturned())
-					IO.getInstance().writeln(card.toString());
-				else if (card.equals(this.piles.get(pileIndex - 1).getFirstCard()))
-					IO.getInstance().writeln("[X,X]");
+			for (Card card : pile.getCards()) {
+				if (card.isUpturned())
+					IO.getInstance().write(card.toString());
+				else if ((pile.numberOfUpturnedCards() == 0) && card.equals(pile.getFirstCard()))
+					IO.getInstance().write("[X,X]");
 				else
 					IO.getInstance().write("[");
 			}
+			
+			IO.getInstance().writeln();
 		}
 
 		IO.getInstance().writeGameMenu();
