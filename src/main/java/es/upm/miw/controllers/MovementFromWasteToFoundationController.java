@@ -34,8 +34,8 @@ public class MovementFromWasteToFoundationController extends Controller {
 			this.setState(State.FINAL);
 			IO.getInstance().writeln(InputMessage.GAME_HAS_BEEN_FINISHED.toString());
 		}
-
-		this.getTableau().write();
+		else
+			this.getTableau().write();
 	}
 
 }
