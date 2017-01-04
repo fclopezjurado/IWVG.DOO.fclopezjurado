@@ -138,7 +138,7 @@ public class Tableau {
 	 * 
 	 */
 	public boolean moveToDeck() {
-		return this.moveCards(this.waste, this.deck, Waste.SIZE, true);
+		return this.moveCards(this.waste, this.deck, this.waste.numberOfCards(), true);
 	}
 
 	/**
