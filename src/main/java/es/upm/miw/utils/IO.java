@@ -5,7 +5,6 @@ package es.upm.miw.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 /**
  * @author FCL
@@ -13,7 +12,6 @@ import java.util.ArrayList;
  */
 public class IO {
 	private static final String INT_FORMAT = "entero";
-	private static final String CHAR_FORMAT = "caracter";
 	public static final String DOUBLE_HORIZONTAL_LINE = "===========================";
 	private static final String SINGLE_HORIZONTAL_LINE = "---------------------------";
 	private static IO io;
@@ -123,32 +121,24 @@ public class IO {
 	}
 
 	/**
-	 * @param inputMessage
-	 * @param suits
+	 * @param numberOfSuits
 	 * @return
 	 */
-	public String readSuit(String inputMessage, ArrayList<String> suits) {
-		String inputSuit = "";
-		boolean OK = false;
+	public int readFoundation(int numberOfSuits) {
+		int foundationNumber = 0;
 
-		while (!OK) {
-			this.write(inputMessage);
+		while (foundationNumber == 0) {
+			foundationNumber = this.readInt(InputMessage.GET_FOUNDATION + "[1," + numberOfSuits + "]: ");
 
-			try {
-				inputSuit = bufferedReader.readLine();
-
-				for (String suit : suits)
-					if (inputSuit.equals(suit))
-						OK = true;
-
-				if (!OK)
-					this.writeln(Error.INVALID_SUIT.toString());
-			} catch (Exception ex) {
-				this.writeFormatError(CHAR_FORMAT);
+			if ((foundationNumber > 0) && (foundationNumber <= numberOfSuits))
+				return foundationNumber;
+			else {
+				this.writeln(Error.INVALID_SUIT.toString());
+				foundationNumber = 0;
 			}
 		}
 
-		return inputSuit;
+		return foundationNumber;
 	}
 
 	/**
