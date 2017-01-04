@@ -12,7 +12,8 @@ public enum InputMessage {
 	GAME_HAS_BEEN_FINISHED("Victoria!!!!"),
 	EXIT("Adios!!!"),
 	PILE_NUMBER("Escalera? "),
-	NUMBER_OF_CARDS_TO_MOVE("Cuántas cartas? ");
+	NUMBER_OF_CARDS_TO_MOVE("Cuántas cartas? "),
+	GET_FOUNDATION("De qué palo? ");
 	
 	private String inputMessage;
 
