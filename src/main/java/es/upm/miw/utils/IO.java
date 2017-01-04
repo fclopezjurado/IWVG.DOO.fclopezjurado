@@ -57,6 +57,27 @@ public class IO {
 
 		return input;
 	}
+	
+	/**
+	 * @param inputMessage
+	 * @return
+	 */
+	public int readNumberOfCards() {
+		int numberOfCards = 0;
+
+		while (numberOfCards == 0) {
+			numberOfCards = this.readInt(InputMessage.NUMBER_OF_CARDS_TO_MOVE.toString());
+
+			if (numberOfCards > 0)
+				return numberOfCards;
+			else {
+				this.writeln(Error.INVALID_NUMBER_OF_CARD_TO_MOVE.toString());
+				numberOfCards = 0;
+			}
+		}
+
+		return numberOfCards;
+	}
 
 	/**
 	 * @param inputMessage
