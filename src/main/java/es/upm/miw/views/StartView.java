@@ -11,7 +11,7 @@ import es.upm.miw.interfaces.StartController;
  */
 public class StartView {
 
-	public void interact(StartController startController) {
+	protected void interact(StartController startController) {
 	}
 
 }
