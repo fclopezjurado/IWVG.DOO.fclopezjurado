@@ -17,7 +17,7 @@ public class GameView {
 	protected void interact(MovementController movementController) {
 	}
 
-	public int getNumberOfCards() {
+	private int getNumberOfCards() {
 		int numberOfCards = 0;
 
 		while (numberOfCards == 0) {
@@ -34,7 +34,7 @@ public class GameView {
 		return numberOfCards;
 	}
 
-	public int getPileNumber(int piles) {
+	private int getPileNumber(int piles) {
 		int pileNumber = 0;
 
 		while (pileNumber == 0) {
@@ -51,7 +51,7 @@ public class GameView {
 		return pileNumber;
 	}
 
-	public int getFoundation(int suits) {
+	private int getFoundation(int suits) {
 		int foundationNumber = 0;
 
 		while (foundationNumber == 0) {
