@@ -13,20 +13,13 @@ import java.io.InputStreamReader;
 public class IO {
 	private static final String INT_FORMAT = "entero";
 	public static final String DOUBLE_HORIZONTAL_LINE = "===========================";
-	private static final String SINGLE_HORIZONTAL_LINE = "---------------------------";
 	private static IO io;
 	private BufferedReader bufferedReader;
 
-	/**
-	 * 
-	 */
 	private IO() {
 		this.bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	/**
-	 * @return
-	 */
 	public static IO getInstance() {
 		if (io == null)
 			io = new IO();
@@ -34,11 +27,7 @@ public class IO {
 		return io;
 	}
 
-	/**
-	 * @param inputMessage
-	 * @return
-	 */
-	private int readInt(String inputMessage) {
+	public int readInt(String inputMessage) {
 		int input = 0;
 		boolean ok = false;
 
@@ -55,126 +44,19 @@ public class IO {
 
 		return input;
 	}
-	
-	/**
-	 * @param inputMessage
-	 * @return
-	 */
-	public int readNumberOfCards() {
-		int numberOfCards = 0;
 
-		while (numberOfCards == 0) {
-			numberOfCards = this.readInt(InputMessage.NUMBER_OF_CARDS_TO_MOVE.toString());
-
-			if (numberOfCards > 0)
-				return numberOfCards;
-			else {
-				this.writeln(Error.INVALID_NUMBER_OF_CARD_TO_MOVE.toString());
-				numberOfCards = 0;
-			}
-		}
-
-		return numberOfCards;
-	}
-
-	/**
-	 * @param inputMessage
-	 * @return
-	 */
-	public int readMenuOption() {
-		int option = 0;
-
-		while (option == 0) {
-			option = this.readInt(InputMessage.GET_OPTION.toString());
-
-			if ((option > 0) && (option <= Option.values().length))
-				return option;
-			else {
-				this.writeln(Error.WRONG_MENU_OPTION.toString());
-				option = 0;
-			}
-		}
-
-		return option;
-	}
-
-	/**
-	 * @param inputMessage
-	 * @param numberOfPiles
-	 * @return
-	 */
-	public int readPileNumber(int numberOfPiles) {
-		int pileNumber = 0;
-
-		while (pileNumber == 0) {
-			pileNumber = this.readInt(InputMessage.PILE_NUMBER + "[1," + numberOfPiles + "]: ");
-
-			if ((pileNumber > 0) && (pileNumber <= numberOfPiles))
-				return pileNumber;
-			else {
-				this.writeln(Error.INVALID_PILE_NUMBER.toString());
-				pileNumber = 0;
-			}
-		}
-
-		return pileNumber;
-	}
-
-	/**
-	 * @param numberOfSuits
-	 * @return
-	 */
-	public int readFoundation(int numberOfSuits) {
-		int foundationNumber = 0;
-
-		while (foundationNumber == 0) {
-			foundationNumber = this.readInt(InputMessage.GET_FOUNDATION + "[1," + numberOfSuits + "]: ");
-
-			if ((foundationNumber > 0) && (foundationNumber <= numberOfSuits))
-				return foundationNumber;
-			else {
-				this.writeln(Error.INVALID_SUIT.toString());
-				foundationNumber = 0;
-			}
-		}
-
-		return foundationNumber;
-	}
-
-	/**
-	 * 
-	 */
 	public void writeln() {
 		System.out.println();
 	}
 
-	/**
-	 * @param string
-	 */
 	public void write(String string) {
 		System.out.print(string);
 	}
 
-	/**
-	 * @param string
-	 */
 	public void writeln(String string) {
 		System.out.println(string);
 	}
-	
-	/**
-	 * 
-	 */
-	public void writeGameMenu() {
-		this.writeln(SINGLE_HORIZONTAL_LINE);
-		
-		for (int option = 1; option <= Option.values().length; option++)
-			this.writeln(option + ". " + Option.values()[option - 1].toString());
-	}
 
-	/**
-	 * @param formatError
-	 */
 	private void writeFormatError(String formatError) {
 		this.writeln("ERROR DE FORMATO! Introduzca un valor con formato " + formatError + ".");
 	}
