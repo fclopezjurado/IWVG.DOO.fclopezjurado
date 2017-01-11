@@ -13,7 +13,8 @@ public enum InputMessage {
 	EXIT("Adios!!!"),
 	PILE_NUMBER("Escalera? "),
 	NUMBER_OF_CARDS_TO_MOVE("Cuántas cartas? "),
-	GET_FOUNDATION("De qué palo? ");
+	GET_FOUNDATION("De qué palo? "),
+	SINGLE_HORIZONTAL_LINE("---------------------------");
 	
 	private String inputMessage;
 
