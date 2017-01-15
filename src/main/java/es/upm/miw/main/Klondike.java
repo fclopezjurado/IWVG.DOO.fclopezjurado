@@ -1,27 +1,18 @@
-/**
- * 
- */
-package es.upm.miw.models;
+package es.upm.miw.main;
 
 import es.upm.miw.controllers.Controller;
+import es.upm.miw.controllers.Logic;
+import es.upm.miw.views.KlondikeView;
 
-/**
- * @author FCL
- *
- */
 public class Klondike {
 	private Logic logic;
+	private KlondikeView klondikeView;
 
-	/**
-	 * 
-	 */
 	protected Klondike() {
 		this.logic = new Logic();
+		this.klondikeView = new KlondikeView();
 	}
 
-	/**
-	 * 
-	 */
 	private void play() {
 		Controller controller;
 
@@ -29,14 +20,12 @@ public class Klondike {
 			controller = logic.getController();
 
 			if (controller != null)
-				controller.execute();
+				klondikeView.interact(controller);
 		} while (controller != null);
 	}
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		new Klondike().play();
 	}
+
 }

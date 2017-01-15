@@ -1,41 +1,37 @@
-/**
- * 
- */
 package es.upm.miw.controllers;
 
+import es.upm.miw.interfaces.ControllerVisitor;
+import es.upm.miw.interfaces.MovementControllerVisitor;
+import es.upm.miw.interfaces.SmartMovementToKnownDestinyController;
 import es.upm.miw.models.Game;
 import es.upm.miw.models.State;
-import es.upm.miw.utils.IO;
-import es.upm.miw.utils.InputMessage;
-import es.upm.miw.utils.Error;
 
-/**
- * @author FCL
- *
- */
-public class MovementFromWasteToFoundationController extends Controller {
-	/**
-	 * 
-	 * @param game
-	 */
+public class MovementFromWasteToFoundationController extends PresenterController
+		implements SmartMovementToKnownDestinyController {
+
 	public MovementFromWasteToFoundationController(Game game) {
 		super(game);
 	}
 
-	/**
-	 * 
-	 */
 	@Override
-	public void execute() {
-		if (!this.getTableau().moveFromWasteToFoundation())
-			IO.getInstance().writeln(Error.INVALID_MOVEMENT_FROM_WASTE_TO_FOUNDATION.toString());
+	public void accept(ControllerVisitor controllerVisitor) {
+		controllerVisitor.visit(this);
+	}
+	
+	@Override
+	public void accept(MovementControllerVisitor movementControllerVisitor) {
+		movementControllerVisitor.visit(this);
+	}
 
-		if (this.getTableau().areFoundationsFull()) {
-			this.setState(State.FINAL);
-			IO.getInstance().writeln(InputMessage.GAME_HAS_BEEN_FINISHED.toString());
-		}
-		else
-			this.getTableau().write();
+	@Override
+	public boolean move() {
+		this.setState(State.GET_OPTION);
+		return this.getGame().moveFromWasteToFoundation();
+	}
+
+	@Override
+	public boolean playerHasWon() {
+		return this.getGame().areFoundationsFull();
 	}
 
 }
