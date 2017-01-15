@@ -1,37 +1,32 @@
-/**
- * 
- */
 package es.upm.miw.controllers;
 
+import es.upm.miw.interfaces.ControllerVisitor;
+import es.upm.miw.interfaces.MovementControllerVisitor;
+import es.upm.miw.interfaces.MovementToUnknownDestinyController;
 import es.upm.miw.models.Game;
-import es.upm.miw.models.Tableau;
-import es.upm.miw.utils.Error;
-import es.upm.miw.utils.IO;
+import es.upm.miw.models.State;
 
-/**
- * @author FCL
- *
- */
-public class MovementFromWasteToPileController extends Controller {
-	/**
-	 * 
-	 * @param game
-	 */
+public class MovementFromWasteToPileController extends PresenterController
+		implements MovementToUnknownDestinyController {
+
 	public MovementFromWasteToPileController(Game game) {
 		super(game);
 	}
 
-	/**
-	 * 
-	 */
 	@Override
-	public void execute() {
-		int pileNumber = IO.getInstance().readPileNumber(Tableau.PILES);
-		
-		if (!this.getTableau().moveFromWasteToPile(pileNumber))
-			IO.getInstance().writeln(Error.INVALID_MOVEMENT_FROM_WASTE_TO_PILE.toString());
+	public void accept(ControllerVisitor controllerVisitor) {
+		controllerVisitor.visit(this);
+	}
+	
+	@Override
+	public void accept(MovementControllerVisitor movementControllerVisitor) {
+		movementControllerVisitor.visit(this);
+	}
 
-		this.getTableau().write();
+	@Override
+	public boolean move(int destiny) {
+		this.setState(State.GET_OPTION);
+		return this.getGame().moveFromWasteToPile(destiny);
 	}
 
 }
