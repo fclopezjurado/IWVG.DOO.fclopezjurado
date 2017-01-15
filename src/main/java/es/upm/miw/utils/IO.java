@@ -1,15 +1,8 @@
-/**
- * 
- */
 package es.upm.miw.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-/**
- * @author FCL
- *
- */
 public class IO {
 	private static final String INT_FORMAT = "entero";
 	public static final String DOUBLE_HORIZONTAL_LINE = "===========================";
@@ -60,4 +53,5 @@ public class IO {
 	private void writeFormatError(String formatError) {
 		this.writeln("ERROR DE FORMATO! Introduzca un valor con formato " + formatError + ".");
 	}
+
 }
