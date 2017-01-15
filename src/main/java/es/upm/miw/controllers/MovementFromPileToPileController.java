@@ -1,38 +1,32 @@
-/**
- * 
- */
 package es.upm.miw.controllers;
 
+import es.upm.miw.interfaces.ControllerVisitor;
+import es.upm.miw.interfaces.MovementControllerVisitor;
+import es.upm.miw.interfaces.SmartMovementFromOriginToDestinyController;
 import es.upm.miw.models.Game;
-import es.upm.miw.models.Tableau;
-import es.upm.miw.utils.Error;
-import es.upm.miw.utils.IO;
+import es.upm.miw.models.State;
 
-/**
- * @author FCL
- *
- */
-public class MovementFromPileToPileController extends Controller {
-	/**
-	 * 
-	 * @param game
-	 */
+public class MovementFromPileToPileController extends PresenterController
+		implements SmartMovementFromOriginToDestinyController {
+
 	public MovementFromPileToPileController(Game game) {
 		super(game);
 	}
 
-	/**
-	 * 
-	 */
 	@Override
-	public void execute() {
-		int originPileNumber = IO.getInstance().readPileNumber(Tableau.PILES);
-		int numberOfCardsToMove = IO.getInstance().readNumberOfCards();
-		int destinyPileNumber = IO.getInstance().readPileNumber(Tableau.PILES);
-		
-		if (!this.getTableau().moveFromPileToPile(originPileNumber, destinyPileNumber, numberOfCardsToMove))
-			IO.getInstance().writeln(Error.INVALID_MOVEMENT_FROM_PILE_TO_PILE.toString());
-
-		this.getTableau().write();
+	public void accept(ControllerVisitor controllerVisitor) {
+		controllerVisitor.visit(this);
 	}
+	
+	@Override
+	public void accept(MovementControllerVisitor movementControllerVisitor) {
+		movementControllerVisitor.visit(this);
+	}
+
+	@Override
+	public boolean move(int origin, int destiny, int cards) {
+		this.setState(State.GET_OPTION);
+		return this.getGame().moveFromPileToPile(origin, destiny, cards);
+	}
+
 }
