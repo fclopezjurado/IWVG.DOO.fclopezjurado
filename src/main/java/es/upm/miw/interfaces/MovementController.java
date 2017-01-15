@@ -1,9 +1,6 @@
 package es.upm.miw.interfaces;
 
-public interface MovementController extends Controller {
-
-	public void move();
-
-	public boolean playerHasWon();
-
+public interface MovementController extends Controller, PresenterController {
+	
+	public void accept(MovementControllerVisitor movementControllerVisitor);
 }
