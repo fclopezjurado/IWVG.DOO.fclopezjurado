@@ -1,6 +1,3 @@
-/**
- * 
- */
 package es.upm.miw.views;
 
 import es.upm.miw.interfaces.Controller;
@@ -9,10 +6,6 @@ import es.upm.miw.interfaces.MenuController;
 import es.upm.miw.interfaces.MovementController;
 import es.upm.miw.interfaces.StartController;
 
-/**
- * @author FCL
- *
- */
 public class KlondikeView implements ControllerVisitor {
 	private StartView startView;
 	private GameView gameView;
