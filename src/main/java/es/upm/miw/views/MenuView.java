@@ -1,21 +1,14 @@
-/**
- * 
- */
 package es.upm.miw.views;
 
 import es.upm.miw.interfaces.MenuController;
-import es.upm.miw.utils.Error;
 import es.upm.miw.utils.IO;
-import es.upm.miw.utils.InputMessage;
 import es.upm.miw.utils.Option;
 
-/**
- * @author FCL
- *
- */
 public class MenuView {
 
 	protected void interact(MenuController menuController) {
+		this.write();
+		menuController.setOption(this.getOption());
 	}
 
 	private int getOption() {
@@ -34,12 +27,12 @@ public class MenuView {
 
 		return option;
 	}
-	
-	private void write() {
+
+	protected void write() {
 		IO.getInstance().writeln(InputMessage.SINGLE_HORIZONTAL_LINE.toString());
-		
+
 		for (int option = 1; option <= Option.values().length; option++)
 			IO.getInstance().writeln(option + ". " + Option.values()[option - 1].toString());
 	}
-	
+
 }
