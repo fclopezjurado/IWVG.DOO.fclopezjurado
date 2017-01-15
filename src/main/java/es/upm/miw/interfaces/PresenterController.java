@@ -1,9 +1,9 @@
 package es.upm.miw.interfaces;
 
+import java.util.List;
+
 import es.upm.miw.models.Card;
-import es.upm.miw.models.Pile;
 import es.upm.miw.models.Suit;
-import es.upm.miw.models.Waste;
 
 public interface PresenterController {
 
@@ -11,11 +11,11 @@ public interface PresenterController {
 
 	public boolean wasteIsEmpty();
 
-	public Waste getWaste();
+	public List<Card> getWasteCards();
 
 	public int numberOfFoundations();
 
-	public boolean foundationIsEmpty(Suit suit);
+	public boolean foundationIsEmpty(int foundation);
 
 	public Suit getFoundationSuit(int foundation);
 
@@ -23,6 +23,12 @@ public interface PresenterController {
 
 	public int numberOfPiles();
 
-	public Pile getPile(int pile);
+	public List<Card> getPileCards(int pile);
+
+	public boolean cardIsUpturned(int pile, int card);
+
+	public int numberOfUpturnedCards(int pile);
+
+	public boolean equalsToFirstCard(int pile, int card);
 
 }
