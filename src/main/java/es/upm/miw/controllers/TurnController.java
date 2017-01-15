@@ -1,35 +1,31 @@
-/**
- * 
- */
 package es.upm.miw.controllers;
 
+import es.upm.miw.interfaces.ControllerVisitor;
+import es.upm.miw.interfaces.MovementControllerVisitor;
+import es.upm.miw.interfaces.MovementToUnknownDestinyController;
 import es.upm.miw.models.Game;
-import es.upm.miw.models.Tableau;
-import es.upm.miw.utils.Error;
-import es.upm.miw.utils.IO;
+import es.upm.miw.models.State;
 
-/**
- * @author FCL
- *
- */
-public class TurnController extends Controller {
-	/**
-	 * @param game
-	 */
-	public TurnController(Game game) {
+public class TurnController extends PresenterController implements MovementToUnknownDestinyController {
+
+	protected TurnController(Game game) {
 		super(game);
 	}
 
-	/**
-	 * 
-	 */
 	@Override
-	public void execute() {
-		int pileNumber = IO.getInstance().readPileNumber(Tableau.PILES);
-		
-		if (!this.getTableau().turnCardInPile(pileNumber))
-			IO.getInstance().writeln(Error.INVALID_CARD_TURN.toString());
-
-		this.getTableau().write();
+	public boolean move(int destiny) {
+		this.setState(State.GET_OPTION);
+		return this.getGame().turnCard(destiny);
 	}
+
+	@Override
+	public void accept(ControllerVisitor controllerVisitor) {
+		controllerVisitor.visit(this);
+	}
+	
+	@Override
+	public void accept(MovementControllerVisitor movementControllerVisitor) {
+		movementControllerVisitor.visit(this);
+	}
+
 }
