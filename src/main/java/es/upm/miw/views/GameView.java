@@ -1,71 +1,102 @@
-/**
- * 
- */
 package es.upm.miw.views;
 
 import es.upm.miw.interfaces.MovementController;
-import es.upm.miw.utils.Error;
+import es.upm.miw.interfaces.MovementControllerVisitor;
+import es.upm.miw.interfaces.MovementFromOriginToDestinyController;
+import es.upm.miw.interfaces.MovementToKnownDestinyController;
+import es.upm.miw.interfaces.MovementToUnknownDestinyController;
+import es.upm.miw.interfaces.SmartMovementFromOriginToDestinyController;
+import es.upm.miw.interfaces.SmartMovementToKnownDestinyController;
+import es.upm.miw.interfaces.SmartMovementToUnknownDestinyController;
 import es.upm.miw.utils.IO;
-import es.upm.miw.utils.InputMessage;
 
-/**
- * @author FCL
- *
- */
-public class GameView {
+public class GameView implements MovementControllerVisitor {
+
+	private GetNumberOfCardsView getNumberOfCardsView;
+	private GetPileNumberView getPileNumberView;
+	private GetFoundationView getFoundationView;
+	private TableauView tableauView;
 
 	protected void interact(MovementController movementController) {
+		this.getNumberOfCardsView = new GetNumberOfCardsView();
+		this.getPileNumberView = new GetPileNumberView();
+		this.getFoundationView = new GetFoundationView();
+		this.tableauView = new TableauView();
+		movementController.accept(this);
 	}
 
-	private int getNumberOfCards() {
-		int numberOfCards = 0;
+	@Override
+	public void visit(MovementFromOriginToDestinyController movementFromOriginToDestinyController) {
+		int foundationNumber = getFoundationView
+				.getFoundation(movementFromOriginToDestinyController.numberOfFoundations());
+		int destinyPileNumber = getPileNumberView.getPileNumber(movementFromOriginToDestinyController.numberOfPiles());
 
-		while (numberOfCards == 0) {
-			numberOfCards = IO.getInstance().readInt(InputMessage.NUMBER_OF_CARDS_TO_MOVE.toString());
+		if (!movementFromOriginToDestinyController.move(foundationNumber, destinyPileNumber))
+			IO.getInstance().writeln(Error.INVALID_MOVEMENT.toString());
 
-			if (numberOfCards > 0)
-				return numberOfCards;
-			else {
-				IO.getInstance().writeln(Error.INVALID_NUMBER_OF_CARD_TO_MOVE.toString());
-				numberOfCards = 0;
-			}
-		}
-
-		return numberOfCards;
+		this.tableauView.setPresenter(movementFromOriginToDestinyController);
+		this.tableauView.write();
 	}
 
-	private int getPileNumber(int piles) {
-		int pileNumber = 0;
+	@Override
+	public void visit(SmartMovementFromOriginToDestinyController smartMovementFromOriginToDestinyController) {
+		int originPileNumber = getPileNumberView
+				.getPileNumber(smartMovementFromOriginToDestinyController.numberOfPiles());
+		int numberOfCardsToMove = getNumberOfCardsView.getNumberOfCards();
+		int destinyPileNumber = getPileNumberView
+				.getPileNumber(smartMovementFromOriginToDestinyController.numberOfPiles());
 
-		while (pileNumber == 0) {
-			pileNumber = IO.getInstance().readInt(InputMessage.PILE_NUMBER + "[1," + piles + "]: ");
+		if (!smartMovementFromOriginToDestinyController.move(originPileNumber, destinyPileNumber, numberOfCardsToMove))
+			IO.getInstance().writeln(Error.INVALID_MOVEMENT.toString());
 
-			if ((pileNumber > 0) && (pileNumber <= piles))
-				return pileNumber;
-			else {
-				IO.getInstance().writeln(Error.INVALID_PILE_NUMBER.toString());
-				pileNumber = 0;
-			}
-		}
-
-		return pileNumber;
+		this.tableauView.setPresenter(smartMovementFromOriginToDestinyController);
+		this.tableauView.write();
 	}
 
-	private int getFoundation(int suits) {
-		int foundationNumber = 0;
+	@Override
+	public void visit(MovementToUnknownDestinyController movementToUnknownDestinyController) {
+		int pileNumber = getPileNumberView.getPileNumber(movementToUnknownDestinyController.numberOfPiles());
 
-		while (foundationNumber == 0) {
-			foundationNumber = IO.getInstance().readInt(InputMessage.GET_FOUNDATION + "[1," + suits + "]: ");
+		if (!movementToUnknownDestinyController.move(pileNumber))
+			IO.getInstance().writeln(Error.INVALID_MOVEMENT.toString());
 
-			if ((foundationNumber > 0) && (foundationNumber <= suits))
-				return foundationNumber;
-			else {
-				IO.getInstance().writeln(Error.INVALID_SUIT.toString());
-				foundationNumber = 0;
-			}
+		this.tableauView.setPresenter(movementToUnknownDestinyController);
+		this.tableauView.write();
+	}
+
+	@Override
+	public void visit(MovementToKnownDestinyController movementToKnownDestinyController) {
+		movementToKnownDestinyController.move();
+		this.tableauView.setPresenter(movementToKnownDestinyController);
+		this.tableauView.write();
+	}
+
+	@Override
+	public void visit(SmartMovementToUnknownDestinyController smartMovementToUnknownDestinyController) {
+		int pileNumber = getPileNumberView.getPileNumber(smartMovementToUnknownDestinyController.numberOfPiles());
+
+		if (!smartMovementToUnknownDestinyController.move(pileNumber))
+			IO.getInstance().writeln(Error.INVALID_MOVEMENT.toString());
+
+		if (smartMovementToUnknownDestinyController.playerHasWon())
+			IO.getInstance().writeln(InputMessage.GAME_HAS_BEEN_FINISHED.toString());
+		else {
+			this.tableauView.setPresenter(smartMovementToUnknownDestinyController);
+			this.tableauView.write();
 		}
+	}
 
-		return foundationNumber;
+	@Override
+	public void visit(SmartMovementToKnownDestinyController smartMovementToKnownDestinyController) {
+		if (!smartMovementToKnownDestinyController.move())
+			IO.getInstance().writeln(Error.INVALID_MOVEMENT.toString());
+
+		if (smartMovementToKnownDestinyController.playerHasWon())
+			IO.getInstance().writeln(InputMessage.GAME_HAS_BEEN_FINISHED.toString());
+		else {
+			this.tableauView.setPresenter(smartMovementToKnownDestinyController);
+			this.tableauView.write();
+		}
 	}
 
 }
